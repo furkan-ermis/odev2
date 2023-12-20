@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-function Header({ cartList, removeFromCart }) {
+function Header({
+  cartList,
+  removeFromCart,
+  getProductsByWish,
+  wishList,
+  removeFromWishList,
+}) {
+  useEffect(() => {
+    // Call getProductsByWish when the component mounts
+    getProductsByWish();
+  }, [getProductsByWish]); // Include getProductsByWish in the dependency array to avoid lint warnings
+
   const onHandleRemove = (cartItem) => {
     removeFromCart(cartItem);
   };
 
+  const onHandleRemoveWish = (wishItem) => {
+    removeFromWishList(wishItem);
+  };
   return (
     <>
       <div
@@ -59,12 +73,71 @@ function Header({ cartList, removeFromCart }) {
                         &nbsp;&nbsp;&nbsp;
                         <li>
                           <Link to="/cart">
+                            <i className="fa fa-heart" />
+                            <span className="item-count">
+                              {wishList.length}
+                            </span>
+                          </Link>
+                          {wishList.length !== 0 && (
+                            <div className="minicart-wrapper">
+                              <p className="minicart-wrapper__title">WISH</p>
+                              <div className="minicart-wrapper__items ps-scroll">
+                                {wishList.map((item, index) => (
+                                  <div key={index}>
+                                    <div className="minicart-wrapper__items__single">
+                                      <a
+                                        onClick={() => onHandleRemoveWish(item)}
+                                        className="close-icon"
+                                      >
+                                        <i className="pe-7s-close" />
+                                      </a>
+                                      <div className="image">
+                                        <Link
+                                          to={`/productDetail/${item.slug}`}
+                                        >
+                                          <img
+                                            src={item.thumbnail}
+                                            className="img-fluid"
+                                            alt=""
+                                          />
+                                        </Link>
+                                      </div>
+                                      <div className="content">
+                                        <p className="product-title">
+                                          <a href="product-details-basic.html">
+                                            {item.name}
+                                          </a>
+                                        </p>
+                                        <p className="product-calculation">
+                                          <span className="price">
+                                            ${item.price}
+                                          </span>
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                              <div className="minicart-wrapper__buttons">
+                                <Link
+                                  className="theme-button theme-button--minicart-button"
+                                  to="/wish"
+                                >
+                                  VIEW WishList
+                                </Link>
+                              </div>
+                            </div>
+                          )}
+                        </li>
+                        &nbsp;&nbsp;&nbsp;
+                        <li>
+                          <Link to="/cart">
                             <i className="fa fa-shopping-basket" />
                             <span className="item-count">
                               {cartList.length}
                             </span>
                           </Link>
-                          {cartList.length != 0 && (
+                          {cartList.length !== 0 && (
                             <div className="minicart-wrapper">
                               <p className="minicart-wrapper__title">CART</p>
                               <div className="minicart-wrapper__items ps-scroll">

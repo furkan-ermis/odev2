@@ -12,15 +12,29 @@ import Main from "./Pages/Main";
 import OrderDetails from "./Pages/OrderDetail";
 import OrderTrack from "./Pages/OrderTrack";
 import ProductDetail from "./Pages/ProductDetail";
+import Wish from "./Pages/Wish";
 function App() {
   const [productList, setProductList] = useState([]);
   const [cartList, setCartList] = useState([]);
   const [blogs, setBlogs] = useState([]);
   const [comments, setComments] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState([]);
+  const [wishList, setWishList] = useState([]);
+
+  const getProductsByWish = () => {
+    const filteredWishList = productList.filter((x) => x.iswish === true);
+    console.log(filteredWishList);
+    setWishList(filteredWishList);
+  };
+  const removeFromWishList = (item) => {
+    const updatedWishList = wishList.filter((x) => x.Id !== item.Id);
+    changeToWish(item);
+    setCartList(updatedWishList);
+  };
   useEffect(() => {
     GetProducts();
     GetBlogs();
+    getProductsByWish();
   }, []);
   const GetProducts = (categoryId) => {
     let url = "http://localhost:3000/products";
@@ -78,6 +92,7 @@ function App() {
     );
     setCartList(updatedCartList);
   };
+
   const changeToWish = async (item) => {
     const updatedItem = {
       id: item.id,
@@ -142,7 +157,13 @@ function App() {
   };
   return (
     <>
-      <Header cartList={cartList} removeFromCart={removeFromCart} />
+      <Header
+        wishList={wishList}
+        removeFromWishList={removeFromWishList}
+        getProductsByWish={getProductsByWish}
+        cartList={cartList}
+        removeFromCart={removeFromCart}
+      />
       <Routes>
         <Route
           path="/"
@@ -163,6 +184,12 @@ function App() {
         <Route
           path="/cart"
           element={<Cart cartList={cartList} removeFromCart={removeFromCart} />}
+        />
+        <Route
+          path="/wish"
+          element={
+            <Wish wishList={wishList} removeFromWishList={removeFromWishList} />
+          }
         />
         <Route
           path="/blog-detail/:slug"

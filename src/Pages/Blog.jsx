@@ -36,12 +36,23 @@ function Blog({ blogs, getComments }) {
                             <div className="single-blog-post">
                               <div className="single-blog-post__image">
                                 <Link to={`/blog-detail/${blog.slug}`}>
-                                  <img
-                                    src={blog.image}
-                                    className="img-fluid"
-                                    alt=""
-                                    onClick={() => handleComments(blog.id)}
-                                  />
+                                  {blog.image === "" ? (
+                                    <iframe
+                                      width="560"
+                                      height="315"
+                                      src={blog.video}
+                                      title="YouTube video player"
+                                      frameborder="0"
+                                      allow=" clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    ></iframe>
+                                  ) : (
+                                    <img
+                                      src={blog.image}
+                                      className="img-fluid"
+                                      alt=""
+                                      onClick={() => handleComments(blog.id)}
+                                    />
+                                  )}
                                 </Link>
                               </div>
                               <div className="single-blog-post__content">

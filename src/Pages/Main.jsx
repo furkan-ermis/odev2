@@ -1,11 +1,11 @@
-import Footer from "../Components/Footer";
-import Header from "../Components/Header";
 import ProductList from "../Components/ProductList";
 import Slider from "../Components/Slider";
 function Main({ productList, GetProducts, addToCart, changeToWish }) {
   return (
     <>
       <Slider />
+      <br />
+      <br />
       <ProductList
         productList={productList}
         GetProducts={GetProducts}
